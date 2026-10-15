@@ -1,41 +1,18 @@
+
 <?php
 
-use App\Http\Controllers\MahasiswaController;
-use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\QuestionController;
 
-// Halaman Utama → home.blade.php
+// Halaman utama langsung menuju Question
 Route::get('/', function () {
-    return view('home');
+    return redirect()->route('question.index');
 });
 
-// Halaman Home
-Route::get('/', [HomeController::class, 'index']);
+// Menampilkan halaman Question
+Route::get('/question', [QuestionController::class, 'index'])
+    ->name('question.index');
 
-// Halaman PCR
-Route::get('/pcr', function () {
-    return 'Selamat datang di website Kampus PCR';
-});
-
-// Route Mahasiswa
-Route::get('/mahasiswa', function () {
-    return 'Halo Mahasiswa';
-})->name('mahasiswa.show');
-
-// Route Nama
-Route::get('/nama/{param1}', function ($param1) {
-    return 'Nama saya: ' . $param1;
-});
-
-// Route Mahasiswa dengan parameter
-Route::get('/mahasiswa/{param1}', [MahasiswaController::class, 'show']);
-
-// Route NIM
-Route::get('/nim/{param1?}', function ($param1 = '') {
-    return 'NIM saya: ' . $param1;
-});
-
-// Halaman About
-Route::get('/about', function () {
-    return view('halaman-about');
-});
+// Menyimpan pertanyaan dari form
+Route::post('/question', [QuestionController::class, 'store'])
+    ->name('question.store');
