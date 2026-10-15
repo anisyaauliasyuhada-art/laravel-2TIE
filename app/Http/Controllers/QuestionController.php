@@ -16,19 +16,18 @@ class QuestionController extends Controller
         return view('question.create');
     }
 
+
+
     public function store(Request $request)
     {
-        dd($request->all());
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'pertanyaan' => 'required|string',
-        ]);
+        $data['nama'] = $request->nama;
+        $data['email'] = $request->email;
+        $data['pertanyaan'] = $request->pertanyaan;
 
-        return redirect()
-            ->route('question.index')
-            ->with('success', 'Pertanyaan berhasil dikirim!');
+        return view('home-question-respon', $data);
     }
+
+
 
     public function show(string $id)
     {
