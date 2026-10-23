@@ -1,22 +1,30 @@
-
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\QuestionController;
+use Illuminate\Support\Facades\Route;
 
+// Halaman Utama (Langsung ke Dashboard)
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-// Halaman utama langsung menuju Question
-Route::get('/question', [QuestionController::class, 'index'])
-    ->name('question.index');
+// Halaman Home
+Route::get('/home', [HomeController::class, 'index']);
 
-// Menampilkan halaman Question
-Route::get('/question', [QuestionController::class, 'index'])
-    ->name('question.index');
-
-// Menyimpan pertanyaan dari form
-Route::post('/question', [QuestionController::class, 'store'])
+// Question Route
+Route::post('question/store', [QuestionController::class, 'store'])
     ->name('question.store');
 
+// Dashboard Route
+Route::get('dashboard', [DashboardController::class, 'index']);
 
+// Pelanggan Routes (Termasuk create.blade.php)
+Route::get('/pelanggan', [PelangganController::class, 'index'])
+    ->name('pelanggan.index');
+
+Route::get('/pelanggan/create', [PelangganController::class, 'create'])
+    ->name('pelanggan.create');
+
+Route::post('/pelanggan', [PelangganController::class, 'store'])
+    ->name('pelanggan.store');
