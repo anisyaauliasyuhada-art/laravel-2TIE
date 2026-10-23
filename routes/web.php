@@ -28,3 +28,5 @@ Route::get('/pelanggan/create', [PelangganController::class, 'create'])
 
 Route::post('/pelanggan', [PelangganController::class, 'store'])
     ->name('pelanggan.store');
+
+    Route::get('/pelanggan/index', [PelangganController::class, 'index']);
