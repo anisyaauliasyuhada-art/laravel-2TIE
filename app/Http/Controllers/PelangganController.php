@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 
-class PelangganController
+class PelangganController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -12,7 +12,7 @@ class PelangganController
     public function index()
     {
         $data['dataPelanggan'] = Pelanggan::all();
-		return view('admin.pelanggan.index',$data);
+        return view('admin.pelanggan.index', $data);
     }
 
     /**
@@ -28,16 +28,23 @@ class PelangganController
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-
         $request->validate([
-            'nama'   => 'required|string|max:255',
-            'email'  => 'required|email|unique:pelanggans,email',
-            'alamat' => 'nullable|string|max:255',
-            'no_hp'  => 'nullable|string|max:20',
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'birthday' => 'nullable|date',
+            'gender' => 'nullable|in:Male,Female,Other',
+            'email' => 'required|email|unique:pelanggan,email',
+            'phone' => 'nullable|string|max:20',
         ]);
 
-        Pelanggan::create($request->all());
+        Pelanggan::create($request->only([
+            'first_name',
+            'last_name',
+            'birthday',
+            'gender',
+            'email',
+            'phone',
+        ]));
 
         return redirect()->route('pelanggan.index')
             ->with('success', 'Pelanggan berhasil ditambahkan.');
@@ -56,7 +63,8 @@ class PelangganController
      */
     public function edit(string $id)
     {
-        //
+        $dataPelanggan = Pelanggan::findOrFail($id);
+        return view('admin.pelanggan.edit', compact('dataPelanggan'));
     }
 
     /**
@@ -64,7 +72,29 @@ class PelangganController
      */
     public function update(Request $request, string $id)
     {
-        //
+        $dataPelanggan = Pelanggan::findOrFail($id);
+
+        $request->validate([
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'birthday' => 'nullable|date',
+            'gender' => 'nullable|in:Male,Female,Other',
+            'email' => 'required|email|unique:pelanggan,email,' . $id . ',pelanggan_id',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $dataPelanggan->update($request->only([
+            'first_name',
+            'last_name',
+            'birthday',
+            'gender',
+            'email',
+            'phone',
+        ]));
+
+        return redirect()
+            ->route('pelanggan.index')
+            ->with('success', 'Data pelanggan berhasil diperbarui.');
     }
 
     /**
@@ -72,6 +102,11 @@ class PelangganController
      */
     public function destroy(string $id)
     {
-        //
+        $pelanggan = Pelanggan::findOrFail($id);
+
+        $pelanggan->delete();
+
+        return redirect()->route('pelanggan.index')
+            ->with('success', 'Data berhasil dihapus');
     }
 }
