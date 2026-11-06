@@ -27,7 +27,7 @@ Route::get('/pelanggan', [PelangganController::class, 'index'])
 Route::get('/pelanggan/create', [PelangganController::class, 'create'])
     ->name('pelanggan.create');
 
-// Menyimpan pelanggan baru
+// Menyimpan pelanggan bar                   u
 Route::post('/pelanggan', [PelangganController::class, 'store'])
     ->name('pelanggan.store');
 
